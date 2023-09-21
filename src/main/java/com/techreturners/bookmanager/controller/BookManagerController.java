@@ -1,5 +1,6 @@
 package com.techreturners.bookmanager.controller;
 
+import com.techreturners.bookmanager.exception.BookNotFoundException;
 import com.techreturners.bookmanager.model.Book;
 import com.techreturners.bookmanager.service.BookManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,15 @@ public class BookManagerController {
         return new ResponseEntity<>(bookManagerService.getBookById(bookId), HttpStatus.OK);
     }
 
+    @ExceptionHandler (value = BookNotFoundException.class)
+    public ResponseEntity handleBookNotFoundException(
+            BookNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     @DeleteMapping("/{bookId}")
-    public ResponseEntity<Void> deleteBookById(@PathVariable("bookId") Long bookId){
+    public ResponseEntity<Void> deleteBookById(@PathVariable("bookId") Long bookId)
+            throws BookNotFoundException {
         boolean isDeleted = bookManagerService.deleteBookById(bookId);
         return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) :
                     new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -1,5 +1,6 @@
 package com.techreturners.bookmanager.service;
 
+import com.techreturners.bookmanager.exception.BookNotFoundException;
 import com.techreturners.bookmanager.model.Book;
 import com.techreturners.bookmanager.repository.BookManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,8 @@ public class BookManagerServiceImpl implements BookManagerService {
             bookManagerRepository.deleteById(id);
             return true;
         }
-        return false;
+        throw new BookNotFoundException("Book with book Id: "+id+" is not found"+
+        " for delete");
     }
 
 }
