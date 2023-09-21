@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @DataJpaTest
@@ -81,4 +82,19 @@ public class BookManagerServiceTests {
         verify(mockBookManagerRepository, times(1)).save(book);
     }
 
+    //User Story 5 - Delete Book by Id
+    @Test
+    public void testDeleteBookById(){
+        //Insert book to be deleted
+        var book = new Book(4L, "Book Four", "This is the description for Book Four", "Person Four", Genre.Fantasy);
+        Long bookId = 4L;
+        when(mockBookManagerRepository.findById(bookId)).thenReturn(Optional.of(book));
+
+        //Delete book from mock repo
+        mockBookManagerRepository.deleteById(bookId);
+
+        //call service method to delete book and assertTrue is returned
+        boolean isDeleted = bookManagerServiceImpl.deleteBookById(bookId);
+        assertTrue(isDeleted);
+    }
 }

@@ -55,6 +55,6 @@ public class BookManagerController {
             throws BookNotFoundException {
         boolean isDeleted = bookManagerService.deleteBookById(bookId);
         return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) :
-                    new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 }
