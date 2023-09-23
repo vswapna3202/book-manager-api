@@ -42,15 +42,24 @@ The features are:
 
 📘 Task 1: Implement the following User Story with tests.
 
-`User Story: As a user, I want to use the Book Manager API to delete a book using its ID`
+User Story: As a user, I want to use the Book Manager API to delete a book using its ID
+
+``This has been implemented. The user can now delete a book by its id. If the book
+does not exist then a relevant message Book with book Id: does not exist is displayed to user``
 
 
 📘 Extension Task: Oh no! 😭 We've only covered the happy paths in the solution, can you figure out a way
 to add in exception handling to the project? 
 
 - Clue 1: What if someone wants to add a book with an ID for a book that already exists? How do we handle this gracefully?
+  
+  `Book Id is a generated field as book Id cannot be inserted by user duplicate insertion condition
+  would not arise so instead used Book Title to display exception condition. If user tries
+  and inserts two books with same title an exception message is displayed to user` 
 
 
 - Clue 2: What if someone wants to find a book by an ID that doesn't yet exist? 
   How can we improve the API by handling errors gracefully and show a helpful message to the client?
   
+  `If user tries to find a book which does not exist relevant message Book with Book Id:
+  does not exist is displayed to user`
