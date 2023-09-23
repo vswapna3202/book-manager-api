@@ -82,7 +82,7 @@ public class BookManagerServiceTests {
         verify(mockBookManagerRepository, times(1)).save(book);
     }
 
-    //User Story 5 - Delete Book by Id
+    //User Story 5 - Delete Book by id
     @Test
     public void testDeleteBookById(){
         //Insert book to be deleted

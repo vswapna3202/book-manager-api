@@ -1,5 +1,6 @@
 package com.techreturners.bookmanager.controller;
 
+import com.techreturners.bookmanager.exception.BookAlreadyExistsException;
 import com.techreturners.bookmanager.exception.BookNotFoundException;
 import com.techreturners.bookmanager.model.Book;
 import com.techreturners.bookmanager.service.BookManagerService;
@@ -25,16 +26,24 @@ public class BookManagerController {
     }
 
     @GetMapping({"/{bookId}"})
-    public ResponseEntity<Book> getBookById(@PathVariable Long bookId) {
+    public ResponseEntity<Book> getBookById(@PathVariable Long bookId)
+            throws BookNotFoundException{
         return new ResponseEntity<>(bookManagerService.getBookById(bookId), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+    public ResponseEntity<Book> addBook(@RequestBody Book book)
+            throws BookAlreadyExistsException {
         Book newBook = bookManagerService.insertBook(book);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("book", "/api/v1/book/" + newBook.getId().toString());
         return new ResponseEntity<>(newBook, httpHeaders, HttpStatus.CREATED);
+    }
+
+    @ExceptionHandler (value = BookAlreadyExistsException.class)
+    public ResponseEntity handleBookAlreadyExistsException(
+            BookAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     //User Story 4 - Update Book By Id Solution

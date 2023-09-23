@@ -1,5 +1,6 @@
 package com.techreturners.bookmanager.service;
 
+import com.techreturners.bookmanager.exception.BookAlreadyExistsException;
 import com.techreturners.bookmanager.exception.BookNotFoundException;
 import com.techreturners.bookmanager.model.Book;
 import com.techreturners.bookmanager.repository.BookManagerRepository;
@@ -25,12 +26,29 @@ public class BookManagerServiceImpl implements BookManagerService {
 
     @Override
     public Book insertBook(Book book) {
+        String title = book.getTitle();
+        if (title != null) {
+            Optional<Book> bookOptional = bookManagerRepository.findByTitle(title);
+            if (bookOptional.isPresent()) {
+                throw new BookAlreadyExistsException("Book with title: " +
+                        book.getTitle() +
+                        " already exists and cannot be inserted again");
+            }
+        }
         return bookManagerRepository.save(book);
     }
 
     @Override
     public Book getBookById(Long id) {
-        return bookManagerRepository.findById(id).get();
+
+        if (id != null){
+            Optional<Book> bookOptional = bookManagerRepository.findById(id);
+            if (bookOptional.isPresent()){
+                return bookOptional.get();
+            }
+        }
+        throw new BookNotFoundException("Book with book id: "+
+                id+" is not found");
     }
 
     //User Story 4 - Update Book By Id Solution
